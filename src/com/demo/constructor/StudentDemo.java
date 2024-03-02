@@ -6,6 +6,7 @@ public class StudentDemo {
 	int studeRollNo;
 	String studEmail;
 	String studAddress;
+	String add;
 	
 	
 	public StudentDemo(String studName, int studeRollNo, String studEmail, String studAddress) {
