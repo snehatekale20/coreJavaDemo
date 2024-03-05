@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -63,9 +65,49 @@ public class StudentFactory {
 		
 		list.stream().skip(2).forEach(System.out::println);
 		
+		//using teeing method
+		
+		var collectThis = list.stream().collect(Collectors.teeing(Collectors.filtering(a->a.getName().startsWith("a"), Collectors.toList()),
+				Collectors.filtering(a->!a.getName().startsWith("a"), Collectors.toList()), 
+				(li1,li2)->/*{
+						List<List<Student>> list1 = new ArrayList();
+						list1.add(li1);
+						list1.add(li2);
+						return list1;
+				}*/
+		
+		{
+					
+					Map<String,List<Student>> m1 = new HashMap<>();
+					m1.put("Starts with 'a' : ",li1);
+					m1.put("String without 'a' : ", li2);
+					return m1;
+					
+				
+		}
+			
+		));
+		
+		System.out.println(collectThis);
 		
 		
-
+	var collectInt =	list.stream().collect(Collectors.teeing(Collectors.filtering(s->s.getId()>=4, Collectors.toList()), Collectors.filtering(s->s.getId()<4, Collectors.toList()), 
+				(l1,l2)->{
+					
+					Map<String, List<Student>> map = new HashMap<>();
+					map.put("id greater than 4: ", l1);
+					map.put("id less than 4: ", l2);
+					return map;
+					
+				}
+		
+				
+				));
+	
+	System.out.println(collectInt);
+		
+		
+		
 		
 	}
 
